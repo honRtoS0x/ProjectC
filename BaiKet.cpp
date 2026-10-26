@@ -5,10 +5,13 @@ struct GiaoDich {
     int loai;
     char noiDung[100];
     float soTien;
+    int thang;
+    int nam;
 };
 
 struct GiaoDich ds[100];
 int n = 0;
+
 
 void themGiaoDich() {
     if (n >= 100) {
@@ -44,6 +47,23 @@ void themGiaoDich() {
         printf("So tien khong hop le!\n");
         return;
     }
+    
+    printf("Nhap thang giao dich: ");
+    if(scanf("%d",&ds[n].thang) != 1 ) {
+    	printf("Nhap sai du lieu!\n");
+    	return;
+	}
+	
+	printf("Nhap nam giao dich: ");
+	if(scanf("%d",&ds[n].nam) != 1 ) {
+		printf("Nhap sai du lieu!\n");
+		return;
+	}
+	
+	if(ds[n].nam <1900 || ds[n].nam > 2100) {
+		printf("Nam khong hop le!\n");
+		return;
+	}
 
     n++;
     printf("Them giao dich thanh cong!\n");
@@ -68,6 +88,7 @@ void xemGiaoDich() {
 
         printf("Noi dung: %s\n", ds[i].noiDung);
         printf("So tien: %.2f VND\n", ds[i].soTien);
+        printf("thang/nam: %02d/%d\n",ds[n].thang,ds[n].nam);
     }
 }
 
@@ -89,6 +110,53 @@ void tinhTong() {
 	printf("Tong chi: %.2f VND\n",tongChi);
 	printf("So du con lai: %.2f VND\n",soDu);
 }
+
+void thongKeThang(){
+	int thangCanTim;
+	int namCanTim;
+	int soGiaoDich = 0;
+	double tongThu = 0;
+	double tongChi = 0;
+	double chenhLech;
+	
+	printf("\n--- THONG KE THEO THANG ---\n");
+	printf("Nhap thang can thong ke: ");
+	
+	if(scanf("%d",&thangCanTim) != 1 ){
+		printf("Nhap sai du lieu!\n");
+		return;
+	}
+	printf("Nhap Nam can thong ke: ");
+	
+	if(scanf("%d",&namCanTim) != 1){
+		printf("Nhap sai du lieu!\n");
+		return;
+	}
+	
+	if(namCanTim < 1900 || namCanTim> 2100){
+		printf("Nam khong hop le!\n");
+		return;
+	}
+	
+	for (int i = 0;i < n; i++){
+	if(ds[i].thang == thangCanTim && ds[i].nam == namCanTim){
+		soGiaoDich++;
+		
+		if(ds[i].loai == 1){
+			tongThu= tongThu + ds[i].soTien;
+		} else {
+			tongChi = tongChi + ds[i].soTien;
+		}
+	}
+}
+
+	chenhLech = tongThu - tongChi;
+	printf("\nThong ke thang %02d/%d\n",thangCanTim,namCanTim);
+	printf("So giao dich: %d\n",soGiaoDich);
+	printf("Tong thu: %.2f\n",tongThu);
+	printf("Tong chi: %.2f\n",tongChi);
+	printf("Chenh lech trong thang: %.2f VND\n",chenhLech);
+}
 int main() {
     int chon;
 
@@ -99,6 +167,7 @@ int main() {
         printf("1. Them giao dich\n");
         printf("2. Xem danh sach\n");
         printf("3. Tong thu, tong chi va so du\n");
+        printf("4. Thong ke thu chi theo thang\n");
         printf("0. Thoat\n");
         printf("------------------------\n");
         printf("Nhap lua chon: ");
@@ -117,6 +186,9 @@ int main() {
                 break;
             case 3:
             	tinhTong();
+            	break;
+            case 4:
+            	thongKeThang();
             	break;
             case 0:
                 printf("Tam biet!\n");

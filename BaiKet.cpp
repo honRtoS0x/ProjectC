@@ -6,6 +6,7 @@ struct GiaoDich {
     int loai;
     char noiDung[100];
     float soTien;
+    int ngay;
     int thang;
     int nam;
 };
@@ -49,6 +50,13 @@ void themGiaoDich() {
         return;
     }
     
+    printf("Nhap ngay giao dich: ");
+    if(scanf("%d",&ds[n
+	].ngay)!=1){
+    	printf("Nhap sai du lieu!\n");
+    	return;
+	}
+    
     printf("Nhap thang giao dich: ");
     if(scanf("%d",&ds[n].thang) != 1 ) {
     	printf("Nhap sai du lieu!\n");
@@ -66,6 +74,21 @@ void themGiaoDich() {
 		return;
 	}
 
+	int soNgayTrongThang;
+	if(ds[n].thang==2){
+		if(ds[n].nam% 400 ==0 || (ds[n].nam%4 ==0 && ds[n].nam %100 != 0)){
+			soNgayTrongThang = 29;
+		} else
+			soNgayTrongThang = 28;
+	} else if(ds[n].thang == 4 || ds[n].thang == 6 || ds[n].thang == 9|| ds[n].thang== 11){
+		soNgayTrongThang = 30;
+	} else {
+		soNgayTrongThang = 31;
+	}
+	if(ds[n].ngay < 1 ||ds[n].ngay>soNgayTrongThang){
+		printf("Ngay khong hop le!!! vui long nhap lai.\n");
+		return;
+	}
     n++;
     printf("Them giao dich thanh cong!\n");
 }
@@ -89,7 +112,7 @@ void xemGiaoDich() {
 
         printf("Noi dung: %s\n", ds[i].noiDung);
         printf("So tien: %.2f VND\n", ds[i].soTien);
-        printf("thang/nam: %02d/%d\n",ds[n].thang,ds[n].nam);
+        printf("ngay/thang/nam: %02d/%02d/%d\n",ds[n].ngay,ds[n].thang,ds[n].nam);
     }
 }
 
@@ -180,7 +203,7 @@ void timGiaoDich(){
 			}
 			printf("Noi dung: %s\n",ds[i].noiDung);
 			printf("So tien: %.2f VND\n",ds[i].soTien);
-			printf("Thang/nam: %02d/%d\n",ds[i].thang,ds[i].nam);
+			printf("Ngay/thang/nam: %02d/%02d/%d\n",ds[i].ngay,ds[i].thang,ds[i].nam);
 			}
 		}
 		if(soKetQua == 0 ){
@@ -189,6 +212,135 @@ void timGiaoDich(){
 			printf("\nTim thay %d giao dich\n",soKetQua);
 		}
 	}
+
+void suaGiaoDich(){
+	int stt;
+    struct GiaoDich moi;
+
+    printf("\n--- SUA GIAO DICH ---\n");
+
+    if (n == 0) {
+        printf("Chua co giao dich!\n");
+        return;
+    }
+
+    xemGiaoDich();
+
+    printf("\nNhap STT can sua (0 de huy): ");
+
+    if (scanf("%d", &stt) != 1) {
+        printf("Nhap sai du lieu!\n");
+        return;
+    }
+
+    if (stt == 0) {
+        return;
+    }
+
+    if (stt < 1 || stt > n) {
+        printf("STT khong hop le!\n");
+        return;
+    }
+
+    printf("Nhap loai moi (1. Thu, 2. Chi): ");
+
+    if (scanf("%d", &moi.loai) != 1) {
+        printf("Nhap sai du lieu!\n");
+        return;
+    }
+
+    if (moi.loai != 1 && moi.loai != 2) {
+        printf("Loai khong hop le!\n");
+        return;
+    }
+
+    printf("Nhap noi dung moi: ");
+
+    if (scanf(" %99[^\n]", moi.noiDung) != 1) {
+        printf("Nhap sai noi dung!\n");
+        return;
+    }
+
+    printf("Nhap so tien moi: ");
+
+    if (scanf("%f", &moi.soTien) != 1) {
+        printf("Nhap sai du lieu!\n");
+        return;
+    }
+
+    if (moi.soTien <= 0) {
+        printf("So tien phai lon hon 0!\n");
+        return;
+    }
+
+    printf("Nhap thang moi: ");
+
+    if (scanf("%d", &moi.thang) != 1) {
+        printf("Nhap sai du lieu!\n");
+        return;
+    }
+
+    if (moi.thang < 1 || moi.thang > 12) {
+        printf("Thang phai tu 1 den 12!\n");
+        return;
+    }
+
+    printf("Nhap nam moi: ");
+
+    if (scanf("%d", &moi.nam) != 1) {
+        printf("Nhap sai du lieu!\n");
+        return;
+    }
+
+    if (moi.nam < 1900 || moi.nam > 2100) {
+        printf("Nam khong hop le!\n");
+        return;
+    }
+
+    ds[stt - 1] = moi;
+
+    printf("Sua giao dich thanh cong!\n");
+}
+
+void xoaGiaoDich(){
+	int stt;
+	int xacNhan;
+	printf("\n---- XOA GIAO DICH ---\n");
+	if (n==0){
+		printf("Chua co giao dich\n");
+		return;
+	}
+	xemGiaoDich();
+	printf("\nNhap STT can xoa (nhan 0 de huy): ");
+	if(scanf("%d",&stt)!=1){
+		printf("Nhap sai du lieu, vui long nhap lai.\n");
+		return;
+	}
+	if(stt ==0){
+		return;
+	}
+	if (stt < 1 || stt > n){
+		printf("STT khong hop le.\n");
+		return;
+	}
+	printf("Giao dich se xoa: %s\n",ds[stt - 1].noiDung);
+	printf("So tien : %.2f VND\n",ds[stt - 1].soTien);
+	printf("Xac nhan xoa? (1. Co, 0. Huy): ");
+	
+	if(scanf("%d",&xacNhan)!= 1){
+		printf("Nhap sai du lieu.\n");
+		return;
+	}
+	if(xacNhan !=1){
+		printf("Da huy xoa.\n");
+		return;
+	}
+	for(int i = stt - 1; i< n -1; i++){
+		ds[i] = ds[i + 1];
+	}
+	n--;
+	printf("Xoa giao dich thanh cong!\n");
+}
 
 int main() {
     int chon;
@@ -202,6 +354,8 @@ int main() {
         printf("3. Tong thu, tong chi va so du\n");
         printf("4. Thong ke thu chi theo thang\n");
         printf("5. Tim kiem giao dich\n");
+        printf("6. Sua giao dich\n");
+        printf("7. Xoa giao dich\n");
         printf("0. Thoat\n");
         printf("------------------------\n");
         printf("Nhap lua chon: ");
@@ -227,6 +381,12 @@ int main() {
             case 5:
             	timGiaoDich();
             	break;
+            case 6:
+            	suaGiaoDich();
+				break;
+			case 7:
+				xoaGiaoDich();
+				break;
             case 0:
                 printf("Tam biet!\n");
                 break;
